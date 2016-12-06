@@ -32,9 +32,9 @@ minetest.register_node("strongbox:note", {
             "size[6,7;]"..
             "background[-0.5,-0.5;7,8;strongbox_note_bg.png]"..
             "field[0.25,0.5;6,1;line1;Line #1;".. aa .."]" ..
-            "field[0.25,1.5;6,1;line2;Line #2;".. bb .."]" ..
-            "textarea[0.25,2.5;6,4;line3;Line #3;".. cc .."]" ..
-            "button_exit[0.75,6;1.5,1;ent;Validate]"
+            "field[0.25,1.75;6,1;line2;Line #2;".. bb .."]" ..
+            "textarea[0.25,2.75;6,4;line3;Line #3;".. cc .."]" ..
+            "button_exit[0.75,6.25;1.5,1;ent;Validate]"
         )
         
         minetest.register_on_player_receive_fields(function(player, formname, fields)
