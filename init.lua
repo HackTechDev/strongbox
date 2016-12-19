@@ -130,18 +130,21 @@ minetest.register_node("strongbox:secret", {
                     meta:set_string("a", thing1)
                     meta:set_string("b", thing2)
                     meta:set_string("c", thing3)
+                    print(thing2)
                     return true
 
                 elseif fields["ent"] and fields["line2"] ~= "" then
                     meta:set_string("a", thing1)
                     meta:set_string("b", thing2)
                     meta:set_string("c", thing3)
+                    print(thing2)
                     return true
 
                 elseif fields["ent"] and fields["line3"] ~= "" then
                     meta:set_string("a", thing1)
                     meta:set_string("b", thing2)
                     meta:set_string("c", thing3)
+                    print(thing2)
                     return true
                 end
             else
