@@ -76,6 +76,90 @@ minetest.register_node("strongbox:note", {
 
 })
 
+
+-- http://rockstarninja.tech/installation-de-luasqlite3/
+sqlite3 = require("lsqlite3")
+databaseName = "strongbox.sqlite3"
+
+
+function initDatabase()
+    local db = sqlite3.open(databaseName)
+
+    db:exec[[
+      CREATE TABLE strongbox (
+                         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
+                         name CHAR(32),
+                         password CHAR(32),
+                         message CHAR(32)
+                        );
+
+    ]]
+
+    db:close()
+end
+
+function insertStrongbox(name, password, message)
+    print("insertStrongbox: " .. name .. " " .. password .. " " .. message)
+    local db = sqlite3.open(databaseName)
+    local stmt = db:prepare[[   INSERT INTO strongbox VALUES (null, :name, :password, :message) ]]
+  
+    stmt:bind_names{ name = name, password = password, message = message}
+    stmt:step()
+    stmt:finalize()
+
+    db:close()
+end
+
+
+
+function selectStrongbox(name)
+    local db = sqlite3.open(databaseName)
+    for row in db:nrows("SELECT * FROM strongbox WHERE name = '".. name .. "'") do
+      print(row.id, row.name, row.password, row.message)
+    end 
+    db:close()
+end
+
+
+function updateStrongbox(name, password, message)
+    print("updateStrongbox: " .. name .. " " .. password .. " " ..  message)
+    local db = sqlite3.open(databaseName)
+
+    local stmt = db:prepare[[   UPDATE strongbox SET message = :message WHERE name = :name AND password = :password ]]
+    stmt:bind_names{ name = name, password = password, message = message }
+    stmt:step()
+    stmt:finalize()
+
+    db:close()
+end
+
+
+function deleteStrongbox(name)
+    print("deleteStrongbox: " .. name)
+    local db = sqlite3.open(databaseName)
+    local stmt = db:prepare[[ DELETE FROM strongbox WHERE name = :name ]]
+    stmt:bind_names{ name = name }
+    stmt:step()
+    stmt:finalize()
+    db:close()
+end
+
+
+
+function separator()
+    print("-----------------------")
+end
+
+
+------------------------------------------------------------------
+------------------------------------------------------------------
+
+
+-- Init database
+initDatabase()
+
+
+
 -- /giveme strongbox:secret 99
 minetest.register_node("strongbox:secret", {
     description = "Strongbox secret",
@@ -126,27 +210,24 @@ minetest.register_node("strongbox:secret", {
 
             if fields["ent"] or fields["line1"] or fields["line2"] or fields["line3"] then
 
-                if fields["ent"] and fields["line1"] ~= "" then
-                    meta:set_string("a", thing1)
-                    meta:set_string("b", thing2)
-                    meta:set_string("c", thing3)
-                    print(thing2)
-                    return true
+                 if fields["ent"] and fields["line1"] ~= "" and fields["line2"] ~= "" and fields["line3"] ~= "" then
 
-                elseif fields["ent"] and fields["line2"] ~= "" then
-                    meta:set_string("a", thing1)
-                    meta:set_string("b", thing2)
-                    meta:set_string("c", thing3)
-                    print(thing2)
-                    return true
+                    if aa == thing1 and bb == thing2 then
+                        meta:set_string("c", thing3)
+                        
+                        updateStrongbox(thing1, thing2, thing3)
+                    else
+                        meta:set_string("a", thing1)
+                        meta:set_string("b", thing2)
+                        meta:set_string("c", thing3)
+                        insertStrongbox(thing1, thing2, thing3)
+                    end
 
-                elseif fields["ent"] and fields["line3"] ~= "" then
-                    meta:set_string("a", thing1)
-                    meta:set_string("b", thing2)
-                    meta:set_string("c", thing3)
-                    print(thing2)
+                    
+                    selectStrongbox(thing1)
                     return true
                 end
+       
             else
                 return
             end
