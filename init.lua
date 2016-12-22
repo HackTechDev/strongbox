@@ -193,8 +193,8 @@ minetest.register_node("strongbox:secret", {
         minetest.show_formspec(player:get_player_name(),"fs",
             "size[6,7;]"..
             "background[-0.5,-0.5;7,8;strongbox_secret_bg.png]"..
-            "field[0.25,0.5;6,1;line1;Identifiant;".. aa .."]" ..
-            "pwdfield[0.25,1.75;6,1;line2;Mot de passe]" ..
+            "field[0.25,0.5;6,1;line1;Login;".. aa .."]" ..
+            "pwdfield[0.25,1.75;6,1;line2;Password]" ..
             "textarea[0.25,2.75;6,4;line3;Line #3;".. cc .."]" ..
             "button_exit[0.75,6.25;1.5,1;ent;Validate]"
         )
@@ -211,18 +211,19 @@ minetest.register_node("strongbox:secret", {
             if fields["ent"] or fields["line1"] or fields["line2"] or fields["line3"] then
 
                  if fields["ent"] and fields["line1"] ~= "" and fields["line2"] ~= "" and fields["line3"] ~= "" then
+                    print(aa .. " = " .. thing1 .. " | " .. bb .. " = " .. thing2)
 
                     if aa == thing1 and bb == thing2 then
                         meta:set_string("c", thing3)
-                        
                         updateStrongbox(thing1, thing2, thing3)
-                    else
+                    end
+
+                    if aa == "" and aa == "" then
                         meta:set_string("a", thing1)
                         meta:set_string("b", thing2)
                         meta:set_string("c", thing3)
                         insertStrongbox(thing1, thing2, thing3)
                     end
-
                     
                     selectStrongbox(thing1)
                     return true
