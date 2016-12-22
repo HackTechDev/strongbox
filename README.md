@@ -1,5 +1,5 @@
-Minetest node/block note
-========================
+Minetest Strongbox node/block
+=============================
   
 By Le Sanglier des Ardennes 
   
